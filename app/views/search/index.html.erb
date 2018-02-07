@@ -1,0 +1,9 @@
+<h1> 10 Closest Stations (within 6 miles) <h1>
+
+  <% @search.stations.each do |station| %>
+  <%= station.name %>
+  <%= station.address %>
+  <%= station.fuel-type %>
+  <%= station.distance %>
+  <%= station.access-times %>
+  <% end %>
