@@ -1,12 +1,12 @@
 class SearchController < ApplicationController
   def index
-    # @search = StationSearch.new(params[:zip_code])
+    # @search = StationSearch.new(params[:location])
 
     conn = Faraday.new(url: "https://developer.nrel.gov/") do |faraday|
       faraday.headers['X-API-Key'] = ENV["ALTFUEL_API_KEY"]
       faraday.adapter Faraday.default_adapter
     end
-    response = conn.get("/api/alt-fuel-stations/v1/nearest.json?location=80203")
+    response = conn.get("/api/alt-fuel-stations/v1/nearest.json?limit=10&fuel-type=ELEC&fuel-type=LPG&location=80203")
     @stations = JSON.parse(response.body, symbolize_names: true)[:fuel_stations]
     @results = @stations.map do |station|
       Station.new(station)
@@ -14,14 +14,10 @@ class SearchController < ApplicationController
   end
 end
 
-class Station
-  attr_reader :name, :address, :fuel_type, :distance, :access_times
 
-  def initialize(station = [])
-    @name = station[:station_name]
-    @address = station[:street_address]
-    @fuel_type = station[:fuel_type_code]
-    @distance = station[:distance]
-    @access_times = station[:access_days_time]
+class StationSearch
+
+  def stations
+    [Station.new(station)]
   end
 end

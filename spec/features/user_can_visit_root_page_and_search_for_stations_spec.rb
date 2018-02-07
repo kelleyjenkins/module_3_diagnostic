@@ -19,7 +19,7 @@ feature "User can search by zipcode" do
       expect(current_path).to eq('/search')
 
       expect(page).to have_content("10 Closest Stations")
-      expect(stations.count).to eq(10)
+      expect(page).to have_css(".stations", :count =>10)
       expect(page).to have_css(".name")
       expect(page).to have_css(".address")
       expect(page).to have_css(".fuel-type")
